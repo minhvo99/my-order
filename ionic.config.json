@@ -1,0 +1,7 @@
+{
+  "name": "order-now",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
