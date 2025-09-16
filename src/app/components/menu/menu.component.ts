@@ -1,27 +1,26 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { Component, OnInit } from '@angular/core';
+import { IonContent, IonIcon, IonItem, IonList } from '@ionic/angular/standalone';
 import { IonButton } from '@ionic/angular/standalone';
-import { ImageService } from '../services/imageService';
+
 import {
   IonCol,
   IonGrid,
   IonRow,
   IonImg,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonThumbnail,
+  IonSelect, IonSelectOption
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 
-import { TranslateService } from '../services/translate';
+
 import { MenuUploadComponent } from '../menu-upload/menu-upload.component';
+import { TranslateService } from '@app/services/translate';
+import { ImageService } from '@app/services/imageService';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  imports: [
+  imports: [IonList, IonItem, 
     CommonModule,
     IonContent,
     IonIcon,
@@ -30,11 +29,8 @@ import { MenuUploadComponent } from '../menu-upload/menu-upload.component';
     IonGrid,
     IonRow,
     IonImg,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonThumbnail,
     MenuUploadComponent,
+    IonSelect, IonSelectOption
   ],
   providers: [TranslateService],
   standalone: true,
@@ -44,9 +40,7 @@ export class MenuComponent implements OnInit {
     public photoService: ImageService,
   ) {}
 
-  async ngOnInit() {
-    await this.photoService.loadSaved();
-  }
+  ngOnInit() {}
 
   addPhotoToGallery() {
     this.photoService.addNewToGallery();

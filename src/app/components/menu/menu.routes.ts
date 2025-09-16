@@ -9,7 +9,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('../menu/menu.component').then((m) => m.MenuComponent),
+          import('../../components/menu/menu.component').then((m) => m.MenuComponent),
       },
       {
         path: '',

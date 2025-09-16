@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
@@ -9,7 +14,7 @@ interface UserPhoto {
   webviewPath?: string;
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImageService {
   private platform: Platform;
@@ -24,15 +29,15 @@ export class ImageService {
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
-      quality: 100
+      quality: 100,
     });
     // Save the picture and add it to photo collection
-    const savedImageFile = await this.savePicture(capturedPhoto) as any;
+    const savedImageFile = (await this.savePicture(capturedPhoto)) as any;
     this.photos.unshift(savedImageFile);
-    Preferences.set({
-      key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos),
-    });
+    // Preferences.set({
+    //   key: this.PHOTO_STORAGE,
+    //   value: JSON.stringify(this.photos),
+    // });
   }
 
   private async readAsBase64(photo: Photo) {
@@ -40,43 +45,37 @@ export class ImageService {
     if (this.platform.is('hybrid')) {
       // Read the file into base64 format
       const file = await Filesystem.readFile({
-        path: photo.path!
+        path: photo.path!,
       });
 
       return file.data;
-    }
-    else {
-
+    } else {
       const response = await fetch(photo.webPath!);
       const blob = await response.blob();
 
-      return await this.convertBlobToBase64(blob) as string;
+      return (await this.convertBlobToBase64(blob)) as string;
     }
   }
 
-  private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-  });
+  private convertBlobToBase64 = (blob: Blob) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
   public async loadSaved() {
-
     const { value } = await Preferences.get({ key: this.PHOTO_STORAGE });
     this.photos = (value ? JSON.parse(value) : []) as UserPhoto[];
 
-
     if (!this.platform.is('hybrid')) {
-
       for (let photo of this.photos) {
-
         const readFile = await Filesystem.readFile({
           path: photo.filepath,
-          directory: Directory.Data
+          directory: Directory.Data,
         });
-
 
         photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
       }
@@ -92,7 +91,7 @@ export class ImageService {
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
-      directory: Directory.Data
+      directory: Directory.Data,
     });
 
     if (this.platform.is('hybrid')) {
@@ -102,15 +101,13 @@ export class ImageService {
         filepath: savedFile.uri,
         webviewPath: Capacitor.convertFileSrc(savedFile.uri),
       };
-    }
-    else {
+    } else {
       // Use webPath to display the new image instead of base64 since it's
       // already loaded into memory
       return {
         filepath: fileName,
-        webviewPath: photo.webPath
+        webviewPath: photo.webPath,
       };
     }
   }
-
 }

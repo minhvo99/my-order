@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-button (click)="addPhotoToGallery()"
+    >Take a photo <ion-icon name="camera"></ion-icon
+  ></ion-button>
+  <app-menu-upload></app-menu-upload>
+  <ion-list>
+    <ion-item>
+      <ion-select aria-label="Favorite Fruit" value="apple">
+        <ion-select-option value="apple">Apple</ion-select-option>
+        <ion-select-option value="banana">Banana</ion-select-option>
+        <ion-select-option value="orange">Orange</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        @for (photo of photoService.photos; track photo) {
+        <ion-img [src]="photo.webviewPath"></ion-img>
+        }
+      </ion-col>
+      <!-- <ion-col size="6" *ngFor="let photo of photoService.photos; index as position">
+        <ion-img [src]="photo.webviewPath"></ion-img>
+      </ion-col> -->
+    </ion-row>
+  </ion-grid>
+</ion-content>
