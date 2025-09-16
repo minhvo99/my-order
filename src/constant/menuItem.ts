@@ -4,11 +4,11 @@ interface LocaleText {
 }
 
 interface NameSet {
-  kr?: LocaleText;
-  en?: LocaleText;
-  zh?: LocaleText;
-  ko?: LocaleText;
-  ja?: LocaleText;
+  kr: LocaleText;
+  en: LocaleText;
+  zh: LocaleText;
+  ko: LocaleText;
+  ja: LocaleText;
 }
 
 interface ImageInfo {

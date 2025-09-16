@@ -11,7 +11,7 @@ import {
 
 import * as XLSX from 'xlsx';
 import { TranslateService } from '../services/translate';
-import { Subject, takeUntil } from 'rxjs';
+import { combineLatest, forkJoin, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-menu-upload',
@@ -21,7 +21,7 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
 })
 export class MenuUploadComponent {
-  parsedData: MenuItem[] = [];
+  parsedData: any[] = [];
   destroy$: Subject<void> = new Subject<void>();
   constructor(private translateService: TranslateService) {}
   onFileChange(evt: any) {
@@ -44,15 +44,17 @@ export class MenuUploadComponent {
       const data = <any[]>XLSX.utils.sheet_to_json(ws, { header: 1 });
 
       const [header, ...rows] = data;
+      rows.forEach((row: any[]) => {
+        const baseName = row[1] || '';
+        const baseDesc = row[4] || '';
 
-      this.parsedData = rows.map((row: any[]) => {
-        return {
+        const item: MenuItem = {
           nameSet: {
-            kr: { name: row[1] || '', description: row[4] || '' },
-            en: { name: row[1], description: row[4] || '' },
-            zh: { name: row[1], description: row[4] || '' },
-            ko: { name: row[1], description: row[4] || '' },
-            ja: { name: row[1], description: row[4] || '' },
+            kr: { name: baseName, description: baseDesc },
+            en: { name: '', description: '' },
+            zh: { name: '', description: '' },
+            ko: { name: '', description: '' },
+            ja: { name: '', description: '' },
           },
           categoryID: row[0] || '',
           price_pickup: Number(row[2]) || 0,
@@ -63,21 +65,58 @@ export class MenuUploadComponent {
           imgthumb: { path: '', url: row[5] || '' },
           options: [],
           isActive: true,
-        } as MenuItem;
+        };
+
+        this.translateService
+          .translateToAll(baseName)
+          .subscribe((nameTranslations) => {
+            item.nameSet.en.name = nameTranslations.en;
+            item.nameSet.zh.name = nameTranslations.zh;
+            item.nameSet.ko.name = nameTranslations.ko;
+            item.nameSet.ja.name = nameTranslations.ja;
+          });
+
+        this.translateService
+          .translateToAll(baseDesc)
+          .subscribe((descTranslations) => {
+            item.nameSet.en.description = descTranslations.en;
+            item.nameSet.zh.description = descTranslations.zh;
+            item.nameSet.ko.description = descTranslations.ko;
+            item.nameSet.ja.description = descTranslations.ja;
+          });
+
+        this.parsedData.push(item);
       });
-      console.log('Parsed Menu Items:', this.parsedData);
+
+      // this.parsedData = rows.map((row: any[]) => {
+      //   this.translateService.translateToAll(row[4] as string).pipe(takeUntil(this.destroy$))
+      //   .subscribe(trans => {
+      //     result = trans;
+      //     console.log('Translated row:', trans);
+
+      //   })
+      //   return {
+      //     nameSet: {
+      //       kr: { name: row[1] || '', description: row[4] || '' },
+      //       en: { name: row[1], description: row[4] || '' },
+      //       zh: { name: row[1], description: row[4] || '' },
+      //       ko: { name: row[1], description: row[4] || '' },
+      //       ja: { name: row[1], description: row[4] || '' },
+      //     },
+      //     categoryID: row[0] || '',
+      //     price_pickup: Number(row[2]) || 0,
+      //     price_delivery: Number(row[2]) || 0,
+      //     price_dinein: Number(row[2]) || 0,
+      //     requirePrice: true,
+      //     img: { path: '', url: row[5] || '' },
+      //     imgthumb: { path: '', url: row[5] || '' },
+      //     options: [],
+      //     isActive: true,
+      //   } as MenuItem;
+      // });
     };
-    this.onTranslateText('xin chào', 'en').subscribe((res) => {
-      console.log('Translation result:', res);
-    });
 
     reader.readAsBinaryString(target.files[0]);
-  }
-
-  onTranslateText(text: any, targetLang: string, sourceLang: string = 'auto') {
-   return this.translateService
-      .translateText(text, targetLang, sourceLang)
-      .pipe(takeUntil(this.destroy$))
   }
 
   downloadJson() {
