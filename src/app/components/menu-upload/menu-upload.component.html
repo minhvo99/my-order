@@ -5,22 +5,39 @@
   hidden
   #fileInput
   (change)="onFileChange($event)"
-  accept=".csv,.xls,.xlsx"
+  accept=".csv,.xls,.xlsx,.jpg,.jpeg, .png, .bmp, .webp"
 />
+
+<ion-card *ngIf="selectedImage">
+  <ion-card-header>
+    <ion-card-title>Preview</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-img
+      style="width: 500px; height: 500px; display: block; margin: auto"
+      [src]="selectedImage"
+    ></ion-img>
+  </ion-card-content>
+</ion-card>
 
 <ion-list *ngIf="parsedData.length > 0">
   <ion-label>Selected Menu</ion-label>
   <ion-item *ngFor="let item of parsedData">
     <ion-label>
-      <h2>{{ item.nameSet?.en?.name || '' }}</h2>
-      <p>{{ item.categoryID }} - {{ item.price_delivery | currency: 'VND' }}</p>
+      <h2>{{ item.nameSet?.en?.name || "" }}</h2>
+      <p>
+        {{ item.categoryID }} - {{ item.price_delivery | currency : "VND" }}
+      </p>
     </ion-label>
     <ion-thumbnail slot="end" *ngIf="item.img.url">
       <img [src]="item.img.url" />
     </ion-thumbnail>
   </ion-item>
 </ion-list>
-  <!-- <ion-button color="success" *ngIf="parsedData.length > 0" (click)="downloadJson()">
+<!-- <ion-button color="success" *ngIf="parsedData.length > 0" (click)="downloadJson()">
     Download JSON
   </ion-button> -->
- <pre>{{ parsedData | json }}</pre>
+<ion-content>
+  {{ resultAnalyze }}
+</ion-content>
+<app-loading [isLoading]="isLoading"></app-loading>
