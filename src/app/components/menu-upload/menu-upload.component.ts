@@ -1,19 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { Subject, takeUntil } from 'rxjs';
 import { MenuItem } from '@app/models/menu';
-import { VisionServices } from '@app/services/vision';
+import { AnalyzeImageService } from '@app/services/analyzeImageService';
 import { ImportsModule } from '@app/imports';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '@app/services/toastService';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-menu-upload',
   templateUrl: './menu-upload.component.html',
   styleUrls: ['./menu-upload.component.scss'],
-  imports: [ ImportsModule, CommonModule],
+  imports: [ImportsModule, CommonModule,ImageCropperComponent],
   standalone: true,
 })
 export class MenuUploadComponent {
+   imageChangedEvent: Event | null = null;
+  croppedImage: SafeUrl | any = '';
   parsedData: any[] = [];
   excelFormat = ['csv', 'xls', 'xlsx'];
   imageFormat = ['jpg', 'jpeg', 'png', 'bmp', 'webp'];
@@ -21,11 +26,18 @@ export class MenuUploadComponent {
   resultAnalyze!: any;
   destroy$: Subject<void> = new Subject<void>();
   selectedImage: string | ArrayBuffer | null = null;
-  constructor(private visionService: VisionServices) {}
+  analyzeImageService = inject(AnalyzeImageService);
+
+  scaleX = 1;
+  scaleY = 1;
+  transform: any = {};
+  toastService = inject(ToastService);
+  sanitizer = inject(DomSanitizer)
   onFileChange(event: any) {
     this.parsedData = [];
     this.resultAnalyze = null;
     this.selectedImage = null;
+    this.imageChangedEvent = event;
 
     const file: File = event.target.files[0];
     if (!file) return;
@@ -67,50 +79,78 @@ export class MenuUploadComponent {
 
         console.log('Parsed CSV/Excel:', this.parsedData);
       };
-      reader.readAsBinaryString(file);
+
+      reader.readAsDataURL(file);
     } else if (this.imageFormat.includes(ext!)) {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.selectedImage = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
       const formData = new FormData();
       formData.append('image', file);
-       this.isLoading = true;
+      // this.isLoading = true;
 
-      this.visionService
-        .analyzeImage(formData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data) => {
-            this.resultAnalyze = data;
-            if (file.type.startsWith('image/')) {
-              const reader = new FileReader();
-              reader.onload = () => {
-                this.selectedImage = reader.result;
-              };
-              reader.readAsDataURL(file);
-            }
-          },
-          error: (err) => {
-            console.log(err);
-            this.isLoading = false
-          },
-          complete: () => (this.isLoading = false),
-        });
-    } else {
-      console.log('error');
-      return;
+      // this.analyzeImageService
+      //   .analyzeImage(formData)
+      //   .pipe(takeUntil(this.destroy$))
+      //   .subscribe({
+      //     next: (data) => {
+      //       this.resultAnalyze = data;
+      //     },
+      //     error: (err) => {
+      //       console.log(err);
+      //       this.isLoading = false;
+      //       this.toastService.info(
+      //         'Failed to analyze image. Please try again.'
+      //       );
+      //     },
+      //     complete: () => (this.isLoading = false),
+      //   });
+    } else return;
+  }
+    imageCropped(event: ImageCroppedEvent) {
+      this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl as string);
+      // event.blob can be used to upload the cropped image
     }
+
+
+  imageLoaded(image: LoadedImage) {
+    console.log('Image loaded', image);
   }
 
-  downloadJson() {
-    const jsonStr = JSON.stringify(this.parsedData, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'menu.json';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
+  cropperReady() {
+    console.log('Cropper ready');
   }
+
+  loadImageFailed() {
+    console.error('Load failed');
+  }
+
+  rotateLeft() {
+    this.transform = { ...this.transform, rotate: (this.transform.rotate || 0) - 90 };
+  }
+
+  rotateRight() {
+    this.transform = { ...this.transform, rotate: (this.transform.rotate || 0) + 90 };
+  }
+
+  flipHorizontal() {
+    this.scaleX = this.scaleX * -1;
+    this.transform = { ...this.transform, flipH: this.scaleX === -1 };
+  }
+
+  flipVertical() {
+    this.scaleY = this.scaleY * -1;
+    this.transform = { ...this.transform, flipV: this.scaleY === -1 };
+  }
+
+  confirmCrop() {
+    this.selectedImage = this.croppedImage; // Lưu vào preview
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

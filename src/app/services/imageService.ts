@@ -26,18 +26,26 @@ export class ImageService {
   private PHOTO_STORAGE: string = 'photos';
   public async addNewToGallery() {
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri,
-      source: CameraSource.Camera,
-      quality: 100,
-    });
-    // Save the picture and add it to photo collection
-    const savedImageFile = (await this.savePicture(capturedPhoto)) as any;
-    this.photos.unshift(savedImageFile);
-    // Preferences.set({
-    //   key: this.PHOTO_STORAGE,
-    //   value: JSON.stringify(this.photos),
-    // });
+    try {
+      if (!Capacitor.isPluginAvailable('Camera')) {
+        console.warn('Camera not available on this platform');
+        return;
+      }
+      const capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+        quality: 100,
+      });
+      // Save the picture and add it to photo collection
+      const savedImageFile = (await this.savePicture(capturedPhoto)) as any;
+      this.photos.unshift(savedImageFile);
+      Preferences.set({
+        key: this.PHOTO_STORAGE,
+        value: JSON.stringify(this.photos),
+      });
+    } catch (error) {
+      console.log('Camera issue:' + error);
+    }
   }
 
   private async readAsBase64(photo: Photo) {

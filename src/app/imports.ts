@@ -15,7 +15,9 @@ import {
   IonCol,
   IonGrid,
   IonRow,
-  IonSelect, IonSelectOption
+  IonSelect, 
+  IonSelectOption,
+  IonFab, IonFabButton
   
 } from '@ionic/angular/standalone';
 import { NgModule } from '@angular/core';
@@ -41,6 +43,7 @@ const modules = [
     IonSelect, 
     IonSelectOption,
     IonContent,
+    IonFab, IonFabButton
   ]
 
 @NgModule({
