@@ -1,48 +1,16 @@
 import { Component } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
-import {
-  IonList,
-  IonItem,
-  IonLabel,
-  IonThumbnail,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonImg,
-  IonContent,
-} from '@ionic/angular/standalone';
-
 import * as XLSX from 'xlsx';
-
 import { Subject, takeUntil } from 'rxjs';
 import { MenuItem } from '@app/models/menu';
 import { VisionServices } from '@app/services/vision';
-import { LoadingComponent } from '../loading/loading.component';
+import { ImportsModule } from '@app/imports';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-menu-upload',
   templateUrl: './menu-upload.component.html',
   styleUrls: ['./menu-upload.component.scss'],
-  imports: [
-    IonContent,
-    CommonModule,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonThumbnail,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonImg,
-    LoadingComponent,
-  ],
+  imports: [ ImportsModule, CommonModule],
   standalone: true,
 })
 export class MenuUploadComponent {
@@ -55,7 +23,6 @@ export class MenuUploadComponent {
   selectedImage: string | ArrayBuffer | null = null;
   constructor(private visionService: VisionServices) {}
   onFileChange(event: any) {
-    this.isLoading = true;
     this.parsedData = [];
     this.resultAnalyze = null;
     this.selectedImage = null;
@@ -104,6 +71,7 @@ export class MenuUploadComponent {
     } else if (this.imageFormat.includes(ext!)) {
       const formData = new FormData();
       formData.append('image', file);
+       this.isLoading = true;
 
       this.visionService
         .analyzeImage(formData)
@@ -121,6 +89,7 @@ export class MenuUploadComponent {
           },
           error: (err) => {
             console.log(err);
+            this.isLoading = false
           },
           complete: () => (this.isLoading = false),
         });

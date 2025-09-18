@@ -1,0 +1,69 @@
+{
+  "restaurant": "Park Bong Sook Restaurant (박봉숙식당)",
+  "description": "We proudly make all our kimchi in-house and serve it fresh. 本餐厅的泡菜坚持当天新鲜制作, 现做现卖",
+  "meals": [
+    {
+      "name": "Bak Kut Teh (Pork Rib Soup)",
+      "another_name": "박구태 등갈비탕",
+      "price": "26",
+      "note": null
+    },
+    {
+      "name": "Kimchi Pork Stew",
+      "another_name": "김치찌개",
+      "price": "24",
+      "note": null
+    },
+    {
+      "name": "Bulgogi Salad Bibimbap",
+      "another_name": "불고기 샐러드 비빔밥",
+      "price": "21",
+      "note": null
+    },
+    {
+      "name": "Rolled Kimchi & Braised Pork Belly Set",
+      "another_name": "보쌈정식/마늘보쌈정식",
+      "price": [
+        {
+          "value": "25",
+          "note": "Regular"
+        },
+        {
+          "value": "26",
+          "note": "Garlic sauced"
+        }
+      ],
+      "note": null
+    },
+    {
+      "name": "Braised Pork Knuckle Set",
+      "another_name": "족발 정식",
+      "price": "25",
+      "note": null
+    },
+    {
+      "name": "Sauced Pork Cutlet (Korean Retro-style Tonkatsu)",
+      "another_name": "남산돈까스",
+      "price": "25",
+      "note": null
+    },
+    {
+      "name": "Buckwheat Noodle with Braised Pork Belly",
+      "another_name": "보쌈 막국수",
+      "price": "23",
+      "note": "Rice not included"
+    },
+    {
+      "name": "Pork or Seafood Soft Tofu Stew",
+      "another_name": "돼지/해물순두부 찌개",
+      "price": "24",
+      "note": null
+    },
+    {
+      "name": "Soybean Paste Stew with Beef & Tendon (served with Bibimbap veggie bowl)",
+      "another_name": "된장찌개 비빔밥",
+      "price": "24",
+      "note": null
+    }
+  ]
+}

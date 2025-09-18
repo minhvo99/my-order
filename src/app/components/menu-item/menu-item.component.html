@@ -1,0 +1,32 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{ restaurant?.restaurant }}</ion-card-title>
+    <ion-card-subtitle>{{ restaurant?.description }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list>
+      @for (meal of restaurant.meals; track meal.name) {
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <h2>{{ meal.name }}</h2>
+          <p>{{ meal.another_name }}</p>
+
+          @if (meal.price) {
+          <p>
+            <strong>{{ meal.price }} SGD</strong>
+          </p>
+          } @if (meal.price) { @for (option of meal.price; track option.value) {
+          <p>
+            <strong>{{ option.value }} SGD</strong>
+            @if (option.note) { ({{ option.note }}) }
+          </p>
+          } } @if (meal.note) {
+          <p class="note">{{ meal.note }}</p>
+          }
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+  </ion-card-content>
+</ion-card>
