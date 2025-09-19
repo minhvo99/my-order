@@ -28,10 +28,7 @@ interface OptionItem {
 }
 
 interface MenuOption {
-  nameSet: {
-    kr: { name: string };
-    en: { name: string };
-  };
+  nameSet:NameSet
   items: OptionItem[];
 }
 

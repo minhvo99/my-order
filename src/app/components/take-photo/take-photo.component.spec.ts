@@ -9,8 +9,8 @@ describe('TakePhotoComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TakePhotoComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TakePhotoComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TakePhotoComponent);

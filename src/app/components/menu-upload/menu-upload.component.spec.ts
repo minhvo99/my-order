@@ -9,8 +9,8 @@ describe('MenuUploadComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MenuUploadComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [MenuUploadComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MenuUploadComponent);

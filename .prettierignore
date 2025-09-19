@@ -1,0 +1,8 @@
+# bỏ qua thư mục build/output
+dist
+build
+www
+ios
+android
+coverage
+node_modules

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MenuComponent } from './menu.component';
+import { MenuCsvUploadComponent } from './menu-csv-upload.component';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('MenuCsvUploadComponent', () => {
+  let component: MenuCsvUploadComponent;
+  let fixture: ComponentFixture<MenuCsvUploadComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MenuComponent],
+      declarations: [MenuCsvUploadComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(MenuCsvUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

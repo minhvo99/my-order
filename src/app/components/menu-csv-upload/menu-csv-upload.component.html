@@ -1,0 +1,43 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Menu order</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-grid>
+      <ion-row class="table-header">
+        <ion-col size="2"><b>Category</b></ion-col>
+        <ion-col size="2"><b>Name (KR)</b></ion-col>
+        <ion-col size="2"><b>Name (EN)</b></ion-col>
+        <ion-col size="1"><b>Pickup</b></ion-col>
+        <ion-col size="1"><b>Delivery</b></ion-col>
+        <ion-col size="1"><b>Dine-in</b></ion-col>
+        <ion-col size="1"><b>Active</b></ion-col>
+        <ion-col size="2"><b>Image</b></ion-col>
+      </ion-row>
+
+      @for (item of data; track item) {
+        <ion-row class="table-row">
+          <ion-col size="2">{{ item.categoryID }}</ion-col>
+          <ion-col size="2">{{ item.nameSet.kr.name }}</ion-col>
+          <ion-col size="2">{{ item.nameSet.en.name }}</ion-col>
+          <ion-col size="1">{{ item.price_pickup }}</ion-col>
+          <ion-col size="1">{{ item.price_delivery }}</ion-col>
+          <ion-col size="1">{{ item.price_dinein }}</ion-col>
+          <ion-col size="1">
+            <ion-badge [color]="item.isActive ? 'success' : 'medium'">
+              {{ item.isActive ? 'Yes' : 'No' }}
+            </ion-badge>
+          </ion-col>
+          <ion-col size="2">
+            @if (item?.img?.url) {
+              <ion-thumbnail>
+                <img [src]="item.img.url" alt="menu image" />
+              </ion-thumbnail>
+            }
+          </ion-col>
+        </ion-row>
+      }
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

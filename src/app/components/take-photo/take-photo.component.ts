@@ -8,7 +8,7 @@ import { ImageService } from '@app/services/imageService';
   templateUrl: './take-photo.component.html',
   styleUrls: ['./take-photo.component.scss'],
   standalone: true,
-  imports: [ CommonModule, ImportsModule],
+  imports: [CommonModule, ImportsModule],
 })
 export class TakePhotoComponent implements OnInit {
   photoService = inject(ImageService);

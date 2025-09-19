@@ -1,6 +1,41 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="menu">
     <app-take-photo></app-take-photo>
-    <app-menu-upload></app-menu-upload>
+    <app-menu-upload
+      (imageChangedEvent)="onFileChange($event)"
+    ></app-menu-upload>
+    @if (selectedImage && !resultAnalyze) {
+      <ion-button (click)="startAnalyze()">Run AI Analysis</ion-button>
+    }
   </div>
+  @if (imageChangedEvent) {
+    <div class="image-crop">
+      <app-image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        (croppedImage)="croppedImage($event)"
+      ></app-image-cropper>
+      @if (imageChangedEvent) {
+        <ion-button (click)="confirmCrop()">Crop</ion-button>
+      }
+    </div>
+  }
+  @if (previewImage) {
+    <div class="center-container">
+  <ion-card class="preview-card">
+    <ion-card-content>
+      <ion-img [src]="previewImage"></ion-img>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+  }
+  @if (parsedData.length > 0) {
+    <app-menu-csv-upload [data]="parsedData"></app-menu-csv-upload>
+  }
+
+  @if(resultAnalyze){
+
+      <app-menu-item [menus]="resultAnalyze"></app-menu-item>
+  }
+  <app-loading [isLoading]="isLoading"></app-loading>
 </ion-content>

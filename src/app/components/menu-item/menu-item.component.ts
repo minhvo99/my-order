@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, SimpleChange } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ImportsModule } from '@app/imports';
 
 @Component({
@@ -7,8 +7,8 @@ import { ImportsModule } from '@app/imports';
   templateUrl: './menu-item.component.html',
   styleUrls: ['./menu-item.component.scss'],
   standalone: true,
-  imports: [ImportsModule, CommonModule]
+  imports: [ImportsModule, CommonModule],
 })
-export class MenuItemComponent  {
-   @Input() restaurant: any;
+export class MenuItemComponent {
+  @Input() menus!: any;
 }

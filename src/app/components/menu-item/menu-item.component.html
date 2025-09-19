@@ -1,31 +1,38 @@
 <ion-card>
-  <ion-card-header>
-    <ion-card-title>{{ restaurant?.restaurant }}</ion-card-title>
-    <ion-card-subtitle>{{ restaurant?.description }}</ion-card-subtitle>
-  </ion-card-header>
-
   <ion-card-content>
     <ion-list>
-      @for (meal of restaurant.meals; track meal.name) {
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          <h2>{{ meal.name }}</h2>
-          <p>{{ meal.another_name }}</p>
+      @for (menu of menus; track menu.categoryID) {
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <!-- Tên món -->
+            <h2>{{ menu.nameSet?.en?.name || menu.nameSet?.kr?.name }}</h2>
 
-          @if (meal.price) {
-          <p>
-            <strong>{{ meal.price }} SGD</strong>
-          </p>
-          } @if (meal.price) { @for (option of meal.price; track option.value) {
-          <p>
-            <strong>{{ option.value }} SGD</strong>
-            @if (option.note) { ({{ option.note }}) }
-          </p>
-          } } @if (meal.note) {
-          <p class="note">{{ meal.note }}</p>
-          }
-        </ion-label>
-      </ion-item>
+            <!-- Hiển thị tên khác (KR + JA nếu có) -->
+            <p>
+              {{ menu.nameSet?.kr?.name }}
+              @if (menu.nameSet?.ja?.name) {
+                / {{ menu.nameSet?.ja?.name }}
+              }
+            </p>
+
+            <!-- Giá -->
+            <p>
+              <strong>Pickup:</strong> {{ menu.price_pickup }}<br />
+              <strong>Dine-in:</strong> {{ menu.price_dinein }}<br />
+              <strong>Delivery:</strong> {{ menu.price_delivery }}
+            </p>
+
+            <!-- Ảnh (nếu có url) -->
+            @if (menu.img?.url) {
+              <img [src]="menu.img.url" alt="{{ menu.nameSet?.en?.name }}" />
+            }
+
+            <!-- Thông báo trạng thái -->
+            @if (!menu.isActive) {
+              <p class="note">⚠️ Currently not available</p>
+            }
+          </ion-label>
+        </ion-item>
       }
     </ion-list>
   </ion-card-content>

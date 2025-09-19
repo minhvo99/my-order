@@ -15,36 +15,39 @@ import {
   IonCol,
   IonGrid,
   IonRow,
-  IonSelect, 
+  IonSelect,
   IonSelectOption,
-  IonFab, IonFabButton
-  
+  IonFab,
+  IonFabButton,
+  IonBadge,
 } from '@ionic/angular/standalone';
 import { NgModule } from '@angular/core';
 import { LoadingComponent } from './components/loading/loading.component';
 
 const modules = [
-    IonLabel,
-    IonThumbnail,
-    IonCardContent,
-    IonCardSubtitle,
-    IonCardTitle,
-    LoadingComponent,
-    IonCard, 
-    IonCardHeader,
-    IonList, 
-    IonItem,
-    IonIcon,
-    IonButton,
-    IonCol,
-    IonGrid,
-    IonRow,
-    IonImg,
-    IonSelect, 
-    IonSelectOption,
-    IonContent,
-    IonFab, IonFabButton
-  ]
+  IonLabel,
+  IonThumbnail,
+  IonCardContent,
+  IonCardSubtitle,
+  IonCardTitle,
+  LoadingComponent,
+  IonCard,
+  IonCardHeader,
+  IonList,
+  IonItem,
+  IonIcon,
+  IonButton,
+  IonCol,
+  IonGrid,
+  IonRow,
+  IonImg,
+  IonSelect,
+  IonSelectOption,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonBadge,
+];
 
 @NgModule({
   imports: [...modules],
